@@ -8,32 +8,25 @@ public class ShadowInteract : MonoBehaviour
 
     private bool isControllingShadow;
 
+    public ShadowFollow shadowFollow;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isControllingShadow = false;
+        shadowFollow = GetComponent<ShadowFollow>();
     }
 
 
     //When it is clicked,
     private void OnMouseDown()
     {
-        RaycastHit2D hit;
-        hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
-        if (hit.collider != null)
-        {
-            ShadowFollow shadowFollow = hit.collider.GetComponent<ShadowFollow>();
-
-            if (shadowFollow != null)
-            {
-                playerMovement.canControl = false;
-
-                shadowDrag.SetDraggable(true);
-                isControllingShadow = true;
-            }
-        }
+        playerMovement.canControl = false;
+        shadowFollow.isDragging = true;
+        shadowDrag.SetDraggable(true);
+        isControllingShadow = true;
 
     }
 
@@ -45,6 +38,7 @@ public class ShadowInteract : MonoBehaviour
             playerMovement.canControl = true;
             cameraController.FocusOn(playerMovement.transform);
             shadowDrag.SetDraggable(false);
+            shadowFollow.isDragging = false;
             isControllingShadow = false;
         }
 

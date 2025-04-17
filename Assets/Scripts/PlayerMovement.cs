@@ -6,10 +6,11 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 currentFacing = Vector2.right;
 
     private Rigidbody2D rb;
-    public bool canControl = true;
+    public bool canControl;
 
     void Start()
     {
+        canControl = true;
         rb = GetComponent<Rigidbody2D>();
     }
 
