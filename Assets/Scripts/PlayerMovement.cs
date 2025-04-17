@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 3f;
+    public float moveSpeed;
     public Vector2 currentFacing = Vector2.right;
 
     private Rigidbody2D rb;
-    private Vector2 moveInput;
+    public bool canControl = true;
 
     void Start()
     {
@@ -15,21 +15,29 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // ƒı≈Õ∫‰ 4πÊ«‚ ¿‘∑¬
-        if (Input.GetKeyDown(KeyCode.W))
-            currentFacing = new Vector2(1, 1);
-        else if (Input.GetKeyDown(KeyCode.A))
-            currentFacing = new Vector2(-1, 1);
-        else if (Input.GetKeyDown(KeyCode.S))
-            currentFacing = new Vector2(-1, -1);
-        else if (Input.GetKeyDown(KeyCode.D))
-            currentFacing = new Vector2(1, -1);
+        if (!canControl)
+        {
+            rb.linearVelocity = Vector2.zero; // Stop the player from moving
+            return;
+        }
 
-        moveInput = currentFacing.normalized;
-    }
+        float xAxis = Input.GetAxisRaw("Horizontal");
+        float yAxis = Input.GetAxisRaw("Vertical");
 
-    void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        //Create a new Vector2 for the input
+        Vector2 input = new Vector2(xAxis, yAxis).normalized; 
+
+ 
+        //Quarterview input
+        Vector2 quarterViewInput = new Vector2(input.x - input.y, input.x + input.y).normalized;
+
+
+        //If the input is not zero, set the current facing direction
+        if (quarterViewInput != Vector2.zero)
+        {
+            currentFacing = quarterViewInput;
+        }
+
+        rb.linearVelocity = quarterViewInput * moveSpeed;
     }
 }
