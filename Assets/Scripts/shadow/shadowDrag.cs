@@ -17,6 +17,8 @@ public class shadowDrag : MonoBehaviour
     public float snapRange = 0.5f;
     public LayerMask LayerMask;
 
+    private bool isSnapped = false;
+
 
     void Start()
     {
@@ -44,9 +46,29 @@ public class shadowDrag : MonoBehaviour
             }
         }
 
+        if (canDrag && !isSnapped)
+        {
+            Vector3 targetPos = GetMouseWorldPosition() + offset;
+
+            Vector3 rawDragDir = targetPos - transform.position;
+            Vector3 awayFromPlayer = (transform.position - player.position).normalized;
+
+
+            float dragDist = Mathf.Min(rawDragDir.magnitude, maxDragDistance);
+
+            float signedAngle = Vector3.SignedAngle(awayFromPlayer, rawDragDir, Vector3.forward);
+            float clampedAngle = Mathf.Clamp(signedAngle, -allowedAngle, allowedAngle);
+
+            Quaternion rot = Quaternion.AngleAxis(clampedAngle, Vector3.forward);
+            Vector3 limitedDir = rot * awayFromPlayer;
+
+
+            transform.position = player.position + limitedDir.normalized * dragDist;
+
+        }
+
         if (Input.GetMouseButtonUp(0))
         {
-            canDrag = false;
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, snapRange, LayerMask);
             if (hits.Length > 0)
             {
@@ -68,41 +90,28 @@ public class shadowDrag : MonoBehaviour
                 button.SetActive(true);
                 Debug.Log("그림자 Snap 완료!");
 
+                SetDraggable(false);
+                canDrag = false;
+                isSnapped = true;
             }
 
-            if (canDrag)
-            {
-                Vector3 targetPos = GetMouseWorldPosition() + offset;
-
-                Vector3 rawDragDir = targetPos - transform.position;
-                Vector3 awayFromPlayer = (transform.position - player.position).normalized;
-
-
-                float dragDist = Mathf.Min(rawDragDir.magnitude, maxDragDistance);
-
-                float signedAngle = Vector3.SignedAngle(awayFromPlayer, rawDragDir, Vector3.forward);
-                float clampedAngle = Mathf.Clamp(signedAngle, -allowedAngle, allowedAngle);
-
-                Quaternion rot = Quaternion.AngleAxis(clampedAngle, Vector3.forward);
-                Vector3 limitedDir = rot * awayFromPlayer;
-
-
-                transform.position = player.position + limitedDir.normalized * dragDist;
-
-                if (shadowLineRenderer != null)
-                {                                                        //Offset the shadow line to be below the player
-                    shadowLineRenderer.SetPosition(0, player.position + new Vector3(0, -0.5f, 0));
-                    shadowLineRenderer.SetPosition(1, transform.position);
-                }
-
-            }
         }
+
 
         Vector3 GetMouseWorldPosition()
         {
             Vector3 mouse = Input.mousePosition;
             mouse.z = mainCamera.WorldToScreenPoint(transform.position).z;
             return mainCamera.ScreenToWorldPoint(mouse);
+        }
+    }
+    void LateUpdate()
+    {
+        if (shadowLineRenderer != null && !isSnapped)
+        {
+            Vector3 offset = new Vector3(0, -0.5f, 0);
+            shadowLineRenderer.SetPosition(0, player.position + offset);
+            shadowLineRenderer.SetPosition(1, transform.position);
         }
     }
 }
