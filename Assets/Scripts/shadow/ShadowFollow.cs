@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class ShadowFollow : MonoBehaviour
 {
+    //Script that visually updates the shadow with line renderer.
+
 
     //Will point to the opposite direction from the player
     public Transform player;

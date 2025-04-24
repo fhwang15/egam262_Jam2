@@ -5,8 +5,6 @@ public class shadowDrag : MonoBehaviour
     public delegate void shadowDragEndDelegate(shadowDrag draggable);
     public shadowDragEndDelegate dragEndCallback;
 
-    public GameObject button;
-
     public bool canDrag;
     private Vector3 offset;
     private Camera mainCamera;
@@ -28,7 +26,6 @@ public class shadowDrag : MonoBehaviour
         isSnapped = false;
         canDrag = false;
         mainCamera = Camera.main;
-        button.SetActive(false);
     }
 
     public void SetDraggable(bool value)
@@ -44,7 +41,7 @@ public class shadowDrag : MonoBehaviour
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.GetRayIntersection(ray);
 
-            shadowDrag shadow = hit.collider.GetComponentInChildren<shadowDrag>();
+            shadowDrag shadow = hit.collider.GetComponent<shadowDrag>();
 
             if (shadow != null)
             {
@@ -71,7 +68,6 @@ public class shadowDrag : MonoBehaviour
 
                 float signedAngle = Vector3.SignedAngle(awayFromPlayer, dragDirection, Vector3.forward);
                 float clampedAngle = Mathf.Clamp(signedAngle, -allowedAngle, allowedAngle);
-                Debug.Log($"signedAngle: {signedAngle}, clampedAngle: {clampedAngle}");
 
                 Quaternion rot = Quaternion.AngleAxis(clampedAngle, Vector3.forward);
                 Vector3 limitedDir = rot * awayFromPlayer;
@@ -91,6 +87,9 @@ public class shadowDrag : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && canDrag && !isSnapped)
         {
             canDrag = false;
+            dragEndCallback?.Invoke(this);
+
+            
         }
 
     }

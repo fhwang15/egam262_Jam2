@@ -9,6 +9,7 @@ public class ShadowInteract : MonoBehaviour
     private bool isControllingShadow;
 
     public ShadowFollow shadowFollow;
+    public SnapManager snapManager;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -40,6 +41,8 @@ public class ShadowInteract : MonoBehaviour
             shadowDrag.SetDraggable(false);
             shadowFollow.isDragging = false;
             isControllingShadow = false;
+
+            snapManager.UnSnap(shadowDrag);
         }
 
     }

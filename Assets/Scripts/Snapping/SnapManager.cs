@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections; 
 using Unity.VisualScripting; 
@@ -18,24 +18,49 @@ public class SnapManager : MonoBehaviour
 
     private void OnDragEnded(shadowDrag shadow)
     {
-        float closestDistnace = -1;
+        float closestDistance = float.MaxValue;
         Transform closestSnapPoint = null;
+        SequencedSnapZone validZone = null;
 
-        foreach(Transform t in interactZone)
+        foreach (Transform t in interactZone)
         {
-            float currentDistance = Vector2.Distance(shadow.transform.localPosition, t.localPosition);
+            float currentDistance = Vector2.Distance(shadow.transform.position, t.position);
+            SequencedSnapZone zone = t.GetComponent<SequencedSnapZone>();
 
-            if(closestSnapPoint == null || currentDistance < closestDistnace)
+            //  잠겨 있는 zone은 무시!
+            if (zone != null && !zone.CanSnap())
+            {
+                Debug.Log($"SnapZone{zone.name}은 잠겨 있음! Snap 실패");
+                continue;
+            }
+
+            // SnapZone이 유효하면 거리 비교
+            if (zone != null && currentDistance < closestDistance)
             {
                 closestSnapPoint = t;
-                closestDistnace = currentDistance;
+                closestDistance = currentDistance;
+                validZone = zone;
             }
         }
 
-        if(closestSnapPoint != null && closestDistnace <= snapRange)
+        if (closestSnapPoint != null && closestDistance <= snapRange)
         {
-            shadow.transform.localPosition = closestSnapPoint.localPosition;
+            shadow.transform.position = closestSnapPoint.position;
+            shadow.SetDraggable(false);
+            shadow.isSnapped = true;
+
+            validZone?.OnSnapped();
+        }
+        else
+        {
+            Debug.Log("Snap 실패: 근처에 Snap 가능한 zone이 없음");
         }
 
+    }
+
+    public void UnSnap(shadowDrag shadow)
+    {
+        shadow.SetDraggable(true);
+        shadow.isSnapped = false;
     }
 }
