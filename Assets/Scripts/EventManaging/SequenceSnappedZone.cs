@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +22,18 @@ public class SequencedSnapZone : MonoBehaviour
 
 
     public GameObject unlockIndicator;
+
+    public bool shouldDarken = false;
+    public DarknessManager darknessManager;
+
+    public bool doesDetermineEnd;
+
+    public GameObject endGameIndicator;
+    public TextMeshProUGUI endGameText;
+
+    public bool hasPolice;
+    public GameObject isPolice;
+
 
     void Start()
     {
@@ -71,10 +84,33 @@ public class SequencedSnapZone : MonoBehaviour
             return;
 
         isSolved = true;
-        if (spawnedButton != null)
-            Destroy(spawnedButton);
 
-        Debug.Log($"{gameObject.name} ∆€¡Ò «ÿ∞·!");
+        if (shouldDarken && darknessManager != null)
+        {
+            darknessManager.IncreaseDarkness();
+        }
+
+        if (doesDetermineEnd)
+        {
+            endGameIndicator.SetActive(true);
+            endGameText.text = "You have escaped with your full-power shadow!";
+        }
+
+        if (hasPolice)
+        {
+            if(isPolice != null)
+            {
+                isPolice.SetActive(false);
+            }
+        }
+
+
+        if (spawnedButton != null)
+        {
+            unlockIndicator.SetActive(false);
+            Destroy(spawnedButton);
+        }
+
         onSolved.Invoke();
     }
 
