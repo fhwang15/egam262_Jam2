@@ -29,6 +29,7 @@ public class SequencedSnapZone : MonoBehaviour
     public bool doesDetermineEnd;
 
     public GameObject endGameIndicator;
+    public GameObject endGameTexti;
     public TextMeshProUGUI endGameText;
 
     public bool hasPolice;
@@ -37,6 +38,9 @@ public class SequencedSnapZone : MonoBehaviour
 
     void Start()
     {
+
+        endGameIndicator.SetActive(false);
+        endGameTexti.SetActive(false);
 
         // 선행 조건이 없으면 자동으로 열림
         if (prerequisiteZones.Length == 0)
@@ -92,6 +96,7 @@ public class SequencedSnapZone : MonoBehaviour
 
         if (doesDetermineEnd)
         {
+            endGameTexti.SetActive(true);
             endGameIndicator.SetActive(true);
             endGameText.text = "You have escaped with your full-power shadow!";
         }

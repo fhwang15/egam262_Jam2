@@ -2474,8 +2474,9 @@ MonoBehaviour:
   shouldDarken: 0
   darknessManager: {fileID: 1557674228}
   doesDetermineEnd: 0
-  endGameIndicator: {fileID: 0}
-  endGameText: {fileID: 0}
+  endGameIndicator: {fileID: 1778182521}
+  endGameTexti: {fileID: 2048162275}
+  endGameText: {fileID: 2048162277}
   hasPolice: 1
   isPolice: {fileID: 1105591575}
 --- !u!1 &579594270
@@ -2997,10 +2998,11 @@ MonoBehaviour:
   shouldDarken: 0
   darknessManager: {fileID: 1557674228}
   doesDetermineEnd: 0
-  endGameIndicator: {fileID: 0}
-  endGameText: {fileID: 0}
+  endGameIndicator: {fileID: 1778182521}
+  endGameTexti: {fileID: 2048162275}
+  endGameText: {fileID: 2048162277}
   hasPolice: 0
-  isPolice: {fileID: 0}
+  isPolice: {fileID: 1105591575}
 --- !u!1 &760316764
 GameObject:
   m_ObjectHideFlags: 0
@@ -3488,10 +3490,11 @@ MonoBehaviour:
   shouldDarken: 1
   darknessManager: {fileID: 1557674228}
   doesDetermineEnd: 0
-  endGameIndicator: {fileID: 0}
-  endGameText: {fileID: 0}
+  endGameIndicator: {fileID: 1778182521}
+  endGameTexti: {fileID: 2048162275}
+  endGameText: {fileID: 2048162277}
   hasPolice: 0
-  isPolice: {fileID: 0}
+  isPolice: {fileID: 1105591575}
 --- !u!1 &952042467
 GameObject:
   m_ObjectHideFlags: 0
@@ -28265,7 +28268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1778182522
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29483,9 +29486,10 @@ MonoBehaviour:
   darknessManager: {fileID: 1557674228}
   doesDetermineEnd: 1
   endGameIndicator: {fileID: 1778182521}
+  endGameTexti: {fileID: 2048162275}
   endGameText: {fileID: 2048162277}
   hasPolice: 0
-  isPolice: {fileID: 0}
+  isPolice: {fileID: 1105591575}
 --- !u!212 &2037703306
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -29611,7 +29615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2048162276
 RectTransform:
   m_ObjectHideFlags: 0
